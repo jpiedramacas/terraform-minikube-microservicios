@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Set up Docker to use Minikube's Docker daemon
+# Configurar Docker para usar el demonio de Docker de Minikube
 eval $(minikube -p minikube docker-env)
 
-# Navigate to the project root directory
+# Navegar al directorio raíz del proyecto
 cd ..
 
-# Build the PHP web server image
-docker build --tag $(minikube ip):5000/php-webserver -f php/Dockerfile .
+# Construir la imagen del servidor web PHP
+docker build --tag $(minikube ip):5000/php-webserver -f Dockerfile .

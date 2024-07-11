@@ -13,10 +13,10 @@ provider "kubernetes" {
 }
 
 module "apache" {
-  source = "./apache"
-
+  source = "./HTTP-Apache"
+  
   namespace = "default"
   app_name  = "php-webserver"
   replicas  = 1
-  image     = "192.168.49.2:5000/php-webserver:latest"
+  image     = "${minikube ip}:5000/php-webserver:latest"
 }
