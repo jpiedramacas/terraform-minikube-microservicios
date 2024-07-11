@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "phpmyadmin_deployment" {
+resource "kubernetes_deployment" "mysql_deployment" {
   metadata {
     name      = var.app_name
     namespace = var.namespace
@@ -26,24 +26,24 @@ resource "kubernetes_deployment" "phpmyadmin_deployment" {
           image = var.image
 
           port {
-            container_port = 80
+            container_port = 3306
           }
 
           env {
-            name  = "PMA_USER"
-            value = var.phpmyadmin_user
-          }
-          env {
-            name  = "PMA_PASSWORD"
-            value = var.phpmyadmin_password
-          }
-          env {
-            name  = "PMA_HOST"
-            value = var.mysql_host
-          }
-          env {
             name  = "MYSQL_ROOT_PASSWORD"
             value = var.mysql_root_password
+          }
+          env {
+            name  = "MYSQL_DATABASE"
+            value = var.mysql_database
+          }
+          env {
+            name  = "MYSQL_USER"
+            value = var.mysql_user
+          }
+          env {
+            name  = "MYSQL_PASSWORD"
+            value = var.mysql_password
           }
         }
       }
@@ -51,7 +51,7 @@ resource "kubernetes_deployment" "phpmyadmin_deployment" {
   }
 }
 
-resource "kubernetes_service" "phpmyadmin_service" {
+resource "kubernetes_service" "mysql_service" {
   metadata {
     name      = "${var.app_name}-service"
     namespace = var.namespace
@@ -64,13 +64,13 @@ resource "kubernetes_service" "phpmyadmin_service" {
 
     port {
       protocol    = "TCP"
-      port        = 80
-      target_port = 80
+      port        = 3306
+      target_port = 3306
     }
-    type = "NodePort"
+    type = "ClusterIP"
   }
 
   depends_on = [
-    kubernetes_deployment.phpmyadmin_deployment
+    kubernetes_deployment.mysql_deployment
   ]
 }
