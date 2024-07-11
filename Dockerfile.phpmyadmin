@@ -1,0 +1,2 @@
+# Usar la imagen oficial de phpMyAdmin
+FROM phpmyadmin:latest

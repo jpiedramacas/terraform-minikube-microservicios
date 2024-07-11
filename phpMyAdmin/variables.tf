@@ -21,3 +21,9 @@ variable "image" {
   description = "The Docker image to deploy"
   default     = "phpmyadmin:latest"
 }
+
+variable "minikube_ip" {
+  type        = string
+  description = "The IP address of Minikube"
+  default     = "192.168.49.2"  # Asegúrate de reemplazar con la IP real de Minikube
+}
