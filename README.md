@@ -1,4 +1,3 @@
-Desplegar una aplicación utilizando Minikube, Docker y Terraform puede ser un proceso detallado, pero te guiaré paso a paso para que puedas realizarlo sin problemas. Asegúrate de tener todos los requisitos previos instalados: Docker, Minikube, Terraform y kubectl.
 
 ### Paso 1: Iniciar Minikube
 
