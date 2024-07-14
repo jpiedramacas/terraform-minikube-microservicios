@@ -25,7 +25,7 @@ variable "image" {
 variable "mysql_root_password" {
   type        = string
   description = "MySQL root password"
-  default     = "admin01"  # Asegúrate de reemplazar con una contraseña segura
+  default     = "example_password"  # Asegúrate de reemplazar con una contraseña segura
 }
 
 variable "mysql_database" {

@@ -3,11 +3,14 @@
 # Configurar Docker para usar el demonio de Docker de Minikube
 eval $(minikube -p minikube docker-env)
 
-# Construir la imagen del servidor web PHP
-docker build --tag $(minikube ip):5000/php-webserver -f ./dockerfiles/Dockerfile.apache .
+# Obtener la IP de Minikube
+MINIKUBE_IP=$(minikube ip)
 
-# Construir la imagen de phpMyAdmin
-docker build --tag $(minikube ip):5000/phpmyadmin -f ./dockerfiles/Dockerfile.phpmyadmin .
+# Construir las imágenes
+docker build --tag ${MINIKUBE_IP}:5000/php-webserver -f ./dockerfiles/Dockerfile .
 
-# Construir la imagen de MySQL
-docker build --tag $(minikube ip):5000/mysql -f ./dockerfiles/Dockerfile.mysql .
+# Habilitar el registro en Minikube
+minikube addons enable registry
+
+# Subir las imágenes al registro local
+docker push ${MINIKUBE_IP}:5000/php-webserver
