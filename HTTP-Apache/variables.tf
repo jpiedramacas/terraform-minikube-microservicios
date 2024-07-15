@@ -19,11 +19,11 @@ variable "replicas" {
 variable "image" {
   type        = string
   description = "The Docker image to deploy"
-  default     = "httpd:latest"
+  default     = "php-webserver:latest"
 }
 
 variable "node_port" {
   type        = number
-  description = "The NodePort for the service"
-  default     = 30036  # Asegúrate de reemplazar con un número de puerto adecuado
+  description = "The NodePort for the Apache service"
+  default     = 30002  # Ensure this is within the valid range
 }

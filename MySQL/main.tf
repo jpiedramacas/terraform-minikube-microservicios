@@ -1,14 +1,3 @@
-resource "kubernetes_config_map" "mysql_initdb_config" {
-  metadata {
-    name      = "${var.app_name}-initdb-config"
-    namespace = var.namespace
-  }
-
-  data = {
-    "create_table.sql" = file("${path.module}/create_table.sql")
-  }
-}
-
 resource "kubernetes_secret" "mysql_secret" {
   metadata {
     name      = "${var.app_name}-secret"
@@ -17,7 +6,6 @@ resource "kubernetes_secret" "mysql_secret" {
 
   data = {
     MYSQL_ROOT_PASSWORD = base64encode(var.mysql_root_password)
-    MYSQL_DATABASE      = base64encode(var.mysql_database)
     MYSQL_USER          = base64encode(var.mysql_user)
     MYSQL_PASSWORD      = base64encode(var.mysql_password)
   }
@@ -49,11 +37,6 @@ resource "kubernetes_deployment" "mysql_deployment" {
         container {
           name  = var.app_name
           image = var.image
-
-          port {
-            container_port = 3306
-          }
-
           env {
             name = "MYSQL_ROOT_PASSWORD"
             value_from {
@@ -65,12 +48,7 @@ resource "kubernetes_deployment" "mysql_deployment" {
           }
           env {
             name = "MYSQL_DATABASE"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret.mysql_secret.metadata[0].name
-                key  = "MYSQL_DATABASE"
-              }
-            }
+            value = var.mysql_database
           }
           env {
             name = "MYSQL_USER"
@@ -90,18 +68,8 @@ resource "kubernetes_deployment" "mysql_deployment" {
               }
             }
           }
-
-          volume_mount {
-            name       = "initdb-scripts"
-            mount_path = "/docker-entrypoint-initdb.d"
-          }
-        }
-
-        volume {
-          name = "initdb-scripts"
-
-          config_map {
-            name = kubernetes_config_map.mysql_initdb_config.metadata[0].name
+          port {
+            container_port = 3306
           }
         }
       }

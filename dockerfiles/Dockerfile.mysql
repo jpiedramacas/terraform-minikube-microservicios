@@ -8,4 +8,4 @@ ENV MYSQL_ROOT_PASSWORD=example
 ENV MYSQL_DATABASE=mydatabase
 
 # Copy the SQL scripts to initialize the database
-COPY create_table.sql /docker-entrypoint-initdb.d/
+COPY ./MySQL/create_table.sql /docker-entrypoint-initdb.d/

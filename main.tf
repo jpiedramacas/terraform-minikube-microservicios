@@ -13,7 +13,7 @@ provider "kubernetes" {
 }
 
 locals {
-  minikube_ip = "192.168.49.2"  # Reemplaza esto con la IP real de Minikube
+  minikube_ip = "192.168.49.2"  # Replace with the actual Minikube IP
 }
 
 module "phpmyadmin" {
@@ -21,12 +21,12 @@ module "phpmyadmin" {
   namespace = "default"
   app_name  = "phpmyadmin"
   replicas  = 1
-  image     = "${local.minikube_ip}:5000/phpmyadmin:latest"
+  image     = "phpmyadmin:latest"
   phpmyadmin_user     = "user"
   phpmyadmin_password = "password"
   mysql_host          = "mysql"
   mysql_root_password = "example_password"
-  node_port           = 8080
+  node_port           = 30001
 }
 
 module "apache" {
@@ -35,7 +35,7 @@ module "apache" {
   app_name  = "php-webserver"
   replicas  = 1
   image     = "${local.minikube_ip}:5000/php-webserver:latest"
-  node_port = 3000
+  node_port = 30002
 }
 
 module "mysql" {
@@ -43,10 +43,10 @@ module "mysql" {
   namespace           = "default"
   app_name            = "mysql"
   replicas            = 1
-  image               = "${local.minikube_ip}:5000/mysql:latest"
+  image               = "mysql:latest"
   mysql_root_password = "example_password"
   mysql_database      = "BASE-01A"
   mysql_user          = "user"
   mysql_password      = "password"
-  node_port           = 8000
+  node_port           = 30003
 }
