@@ -2,7 +2,7 @@
 FROM mysql:8.0
 
 # Set the root password for MySQL
-ENV MYSQL_ROOT_PASSWORD=rootpassword
+ENV MYSQL_ROOT_PASSWORD=example
 
 # Create a database
 ENV MYSQL_DATABASE=mydatabase

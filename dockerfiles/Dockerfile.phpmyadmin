@@ -2,6 +2,6 @@
 FROM phpmyadmin/phpmyadmin:latest
 
 # Set environment variables
-ENV PMA_HOST=mysql
+ENV PMA_HOST=db
 ENV PMA_USER=root
-ENV PMA_PASSWORD=rootpassword
+ENV PMA_PASSWORD=notSecureChangeMe
