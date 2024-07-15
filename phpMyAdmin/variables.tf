@@ -26,22 +26,31 @@ variable "phpmyadmin_user" {
   type        = string
   description = "The phpMyAdmin username"
   default     = "user"
+  sensitive   = true
 }
 
 variable "phpmyadmin_password" {
   type        = string
   description = "The phpMyAdmin password"
   default     = "password"
+  sensitive   = true
 }
 
 variable "mysql_host" {
   type        = string
   description = "MySQL host address"
-  default     = "mysql"  # Asegúrate de reemplazar con la dirección IP o nombre de host de tu servidor MySQL
+  default     = "mysql"  # Ensure to replace with the actual MySQL host address
 }
 
 variable "mysql_root_password" {
   type        = string
   description = "MySQL root password"
-  default     = "example_password"  # Asegúrate de reemplazar con la contraseña de root de tu servidor MySQL
+  default     = "example_password"  # Ensure to replace with the actual MySQL root password
+  sensitive   = true
+}
+
+variable "node_port" {
+  type        = number
+  description = "The NodePort for phpMyAdmin service"
+  default     = 30037  # Ensure to replace with an appropriate port number
 }

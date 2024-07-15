@@ -26,6 +26,7 @@ module "phpmyadmin" {
   phpmyadmin_password = "password"
   mysql_host          = "mysql"
   mysql_root_password = "example_password"
+  node_port           = 8080
 }
 
 module "apache" {
@@ -34,6 +35,7 @@ module "apache" {
   app_name  = "php-webserver"
   replicas  = 1
   image     = "${local.minikube_ip}:5000/php-webserver:latest"
+  node_port = 3000
 }
 
 module "mysql" {
@@ -46,4 +48,5 @@ module "mysql" {
   mysql_database      = "BASE-01A"
   mysql_user          = "user"
   mysql_password      = "password"
+  node_port           = 8000
 }

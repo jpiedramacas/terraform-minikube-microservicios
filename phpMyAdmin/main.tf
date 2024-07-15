@@ -1,3 +1,16 @@
+resource "kubernetes_secret" "phpmyadmin_secret" {
+  metadata {
+    name      = "${var.app_name}-secret"
+    namespace = var.namespace
+  }
+
+  data = {
+    PMA_USER            = base64encode(var.phpmyadmin_user)
+    PMA_PASSWORD        = base64encode(var.phpmyadmin_password)
+    MYSQL_ROOT_PASSWORD = base64encode(var.mysql_root_password)
+  }
+}
+
 resource "kubernetes_deployment" "phpmyadmin_deployment" {
   metadata {
     name      = var.app_name
@@ -30,20 +43,35 @@ resource "kubernetes_deployment" "phpmyadmin_deployment" {
           }
 
           env {
-            name  = "PMA_USER"
-            value = var.phpmyadmin_user
+            name = "PMA_USER"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.phpmyadmin_secret.metadata[0].name
+                key  = "PMA_USER"
+              }
+            }
           }
           env {
-            name  = "PMA_PASSWORD"
-            value = var.phpmyadmin_password
+            name = "PMA_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.phpmyadmin_secret.metadata[0].name
+                key  = "PMA_PASSWORD"
+              }
+            }
           }
           env {
-            name  = "PMA_HOST"
+            name = "PMA_HOST"
             value = var.mysql_host
           }
           env {
-            name  = "MYSQL_ROOT_PASSWORD"
-            value = var.mysql_root_password
+            name = "MYSQL_ROOT_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.phpmyadmin_secret.metadata[0].name
+                key  = "MYSQL_ROOT_PASSWORD"
+              }
+            }
           }
         }
       }
@@ -66,6 +94,7 @@ resource "kubernetes_service" "phpmyadmin_service" {
       protocol    = "TCP"
       port        = 80
       target_port = 80
+      node_port   = var.node_port
     }
     type = "NodePort"
   }

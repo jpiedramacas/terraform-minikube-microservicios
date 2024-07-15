@@ -1,0 +1,11 @@
+# Use the official MySQL image
+FROM mysql:8.0
+
+# Set the root password for MySQL
+ENV MYSQL_ROOT_PASSWORD=rootpassword
+
+# Create a database
+ENV MYSQL_DATABASE=mydatabase
+
+# Copy the SQL scripts to initialize the database
+COPY create_table.sql /docker-entrypoint-initdb.d/

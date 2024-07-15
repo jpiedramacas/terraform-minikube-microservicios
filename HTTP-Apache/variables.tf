@@ -21,3 +21,9 @@ variable "image" {
   description = "The Docker image to deploy"
   default     = "httpd:latest"
 }
+
+variable "node_port" {
+  type        = number
+  description = "The NodePort for the service"
+  default     = 30036  # Asegúrate de reemplazar con un número de puerto adecuado
+}

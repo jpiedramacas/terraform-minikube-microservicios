@@ -25,23 +25,31 @@ variable "image" {
 variable "mysql_root_password" {
   type        = string
   description = "MySQL root password"
-  default     = "example_password"  # Asegúrate de reemplazar con una contraseña segura
+  default     = "example_password"  # Replace with a secure password
+  sensitive   = true
 }
 
 variable "mysql_database" {
   type        = string
   description = "MySQL database name"
-  default     = "BASE-01A"  # Asegúrate de reemplazar con el nombre de tu base de datos
+  default     = "BASE-01A"  # Replace with your database name
 }
 
 variable "mysql_user" {
   type        = string
   description = "MySQL user name"
-  default     = "user"  # Asegúrate de reemplazar con el nombre de tu usuario MySQL
+  default     = "user"  # Replace with your MySQL user name
 }
 
 variable "mysql_password" {
   type        = string
   description = "MySQL user password"
-  default     = "password"  # Asegúrate de reemplazar con una contraseña segura para el usuario MySQL
+  default     = "password"  # Replace with a secure password
+  sensitive   = true
+}
+
+variable "node_port" {
+  type        = number
+  description = "The NodePort for MySQL service"
+  default     = 30036
 }

@@ -9,6 +9,20 @@ resource "kubernetes_config_map" "mysql_initdb_config" {
   }
 }
 
+resource "kubernetes_secret" "mysql_secret" {
+  metadata {
+    name      = "${var.app_name}-secret"
+    namespace = var.namespace
+  }
+
+  data = {
+    MYSQL_ROOT_PASSWORD = base64encode(var.mysql_root_password)
+    MYSQL_DATABASE      = base64encode(var.mysql_database)
+    MYSQL_USER          = base64encode(var.mysql_user)
+    MYSQL_PASSWORD      = base64encode(var.mysql_password)
+  }
+}
+
 resource "kubernetes_deployment" "mysql_deployment" {
   metadata {
     name      = var.app_name
@@ -41,24 +55,44 @@ resource "kubernetes_deployment" "mysql_deployment" {
           }
 
           env {
-            name  = "MYSQL_ROOT_PASSWORD"
-            value = var.mysql_root_password
+            name = "MYSQL_ROOT_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.mysql_secret.metadata[0].name
+                key  = "MYSQL_ROOT_PASSWORD"
+              }
+            }
           }
           env {
-            name  = "MYSQL_DATABASE"
-            value = var.mysql_database
+            name = "MYSQL_DATABASE"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.mysql_secret.metadata[0].name
+                key  = "MYSQL_DATABASE"
+              }
+            }
           }
           env {
-            name  = "MYSQL_USER"
-            value = var.mysql_user
+            name = "MYSQL_USER"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.mysql_secret.metadata[0].name
+                key  = "MYSQL_USER"
+              }
+            }
           }
           env {
-            name  = "MYSQL_PASSWORD"
-            value = var.mysql_password
+            name = "MYSQL_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.mysql_secret.metadata[0].name
+                key  = "MYSQL_PASSWORD"
+              }
+            }
           }
 
           volume_mount {
-            name      = "initdb-scripts"
+            name       = "initdb-scripts"
             mount_path = "/docker-entrypoint-initdb.d"
           }
         }
@@ -90,8 +124,9 @@ resource "kubernetes_service" "mysql_service" {
       protocol    = "TCP"
       port        = 3306
       target_port = 3306
+      node_port   = var.node_port
     }
-    type = "ClusterIP"
+    type = "NodePort"
   }
 
   depends_on = [
