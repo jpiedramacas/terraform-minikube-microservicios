@@ -13,7 +13,7 @@ provider "kubernetes" {
 }
 
 locals {
-  minikube_ip = "192.168.49.2"  # Replace with the actual Minikube IP
+  minikube_ip = "192.168.49.2"  # Asegúrate de que esta IP sea la correcta para tu Minikube
 }
 
 module "phpmyadmin" {
@@ -22,9 +22,7 @@ module "phpmyadmin" {
   app_name  = "phpmyadmin"
   replicas  = 1
   image     = "phpmyadmin:latest"
-  phpmyadmin_user     = "user"
-  phpmyadmin_password = "password"
-  mysql_host          = "mysql"
+  mysql_host  = "mysql-service"  # Asegúrate de que este valor coincida con el nombre del servicio de MySQL
   mysql_root_password = "example_password"
   node_port           = 30001
 }

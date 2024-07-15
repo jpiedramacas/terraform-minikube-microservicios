@@ -39,7 +39,7 @@ variable "phpmyadmin_password" {
 variable "mysql_host" {
   type        = string
   description = "MySQL host address"
-  default     = "mysql"
+  default     = "mysql-service"  # Asegúrate de que este valor coincida con el nombre del servicio de MySQL
 }
 
 variable "mysql_root_password" {
@@ -52,5 +52,5 @@ variable "mysql_root_password" {
 variable "node_port" {
   type        = number
   description = "The NodePort for phpMyAdmin service"
-  default     = 30001  # Ensure this is within the valid range
+  default     = 30001  # Asegúrate de que este puerto esté disponible y configurado correctamente
 }
