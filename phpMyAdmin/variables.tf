@@ -25,32 +25,23 @@ variable "image" {
 variable "phpmyadmin_user" {
   type        = string
   description = "The phpMyAdmin username"
-  default     = "user"
-  sensitive   = true
+  default     = "user02"
 }
 
 variable "phpmyadmin_password" {
   type        = string
   description = "The phpMyAdmin password"
-  default     = "password"
-  sensitive   = true
+  default     = "password-02"
 }
 
 variable "mysql_host" {
   type        = string
   description = "MySQL host address"
-  default     = "mysql-service"  # Asegúrate de que este valor coincida con el nombre del servicio de MySQL
+  default     = "mysql-service"
 }
 
 variable "mysql_root_password" {
   type        = string
   description = "MySQL root password"
-  default     = "example_password"
-  sensitive   = true
-}
-
-variable "node_port" {
-  type        = number
-  description = "The NodePort for phpMyAdmin service"
-  default     = 30001  # Asegúrate de que este puerto esté disponible y configurado correctamente
+  default     = "admin-password"
 }

@@ -25,8 +25,7 @@ variable "image" {
 variable "mysql_root_password" {
   type        = string
   description = "The root password for MySQL"
-  default     = "example_password"
-  sensitive   = true
+  default     = "admin-password"
 }
 
 variable "mysql_database" {
@@ -38,18 +37,11 @@ variable "mysql_database" {
 variable "mysql_user" {
   type        = string
   description = "The MySQL user"
-  default     = "user"
+  default     = "user02"
 }
 
 variable "mysql_password" {
   type        = string
   description = "The password for the MySQL user"
-  default     = "password"
-  sensitive   = true
-}
-
-variable "node_port" {
-  type        = number
-  description = "The NodePort for the MySQL service"
-  default     = 30003  # Ensure this is within the valid range
+  default     = "password-02"
 }

@@ -1,8 +1,8 @@
-<?php 
+<?php
 $servername = "mysql-service"; // El nombre del servicio MySQL en Kubernetes
-$username = "my_user"; // El nombre de usuario de MySQL configurado
-$password = "my_password"; // La contraseña de MySQL configurada
-$dbname = "my_database"; // El nombre de la base de datos MySQL configurada
+$username = "user"; // El nombre de usuario de MySQL configurado
+$password = "password02"; // La contraseña de MySQL configurada
+$dbname = "mydatabase"; // El nombre de la base de datos MySQL configurada
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);

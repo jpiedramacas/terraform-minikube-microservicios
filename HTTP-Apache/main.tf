@@ -24,7 +24,24 @@ resource "kubernetes_deployment" "apache_deployment" {
         container {
           name  = var.app_name
           image = var.image
-          image_pull_policy = "IfNotPresent"
+
+          env {
+            name  = "MYSQL_SERVICE_HOST"
+            value = "mysql-service"
+          }
+          env {
+            name  = "MYSQL_USER"
+            value = "user02"
+          }
+          env {
+            name  = "MYSQL_PASSWORD"
+            value = "password-02"
+          }
+          env {
+            name  = "MYSQL_DATABASE"
+            value = "mydatabase"
+          }
+
           port {
             container_port = 80
           }
@@ -49,10 +66,10 @@ resource "kubernetes_service" "apache_service" {
       protocol    = "TCP"
       port        = 80
       target_port = 80
-      node_port   = var.node_port
     }
-    type = "NodePort"
+    type = "ClusterIP"
   }
+
   depends_on = [
     kubernetes_deployment.apache_deployment
   ]

@@ -1,13 +1,14 @@
-resource "kubernetes_secret" "mysql_secret" {
+resource "kubernetes_config_map" "mysql_initdb_config" {
   metadata {
-    name      = "${var.app_name}-secret"
+    name      = "${var.app_name}-config"
     namespace = var.namespace
   }
 
   data = {
-    MYSQL_ROOT_PASSWORD = base64encode(var.mysql_root_password)
-    MYSQL_USER          = base64encode(var.mysql_user)
-    MYSQL_PASSWORD      = base64encode(var.mysql_password)
+    MYSQL_ROOT_PASSWORD = var.mysql_root_password
+    MYSQL_USER          = var.mysql_user
+    MYSQL_PASSWORD      = var.mysql_password
+    MYSQL_DATABASE      = var.mysql_database
   }
 }
 
@@ -37,24 +38,30 @@ resource "kubernetes_deployment" "mysql_deployment" {
         container {
           name  = var.app_name
           image = var.image
+
           env {
             name = "MYSQL_ROOT_PASSWORD"
             value_from {
-              secret_key_ref {
-                name = kubernetes_secret.mysql_secret.metadata[0].name
+              config_map_key_ref {
+                name = kubernetes_config_map.mysql_initdb_config.metadata[0].name
                 key  = "MYSQL_ROOT_PASSWORD"
               }
             }
           }
           env {
             name = "MYSQL_DATABASE"
-            value = var.mysql_database
+            value_from {
+              config_map_key_ref {
+                name = kubernetes_config_map.mysql_initdb_config.metadata[0].name
+                key  = "MYSQL_DATABASE"
+              }
+            }
           }
           env {
             name = "MYSQL_USER"
             value_from {
-              secret_key_ref {
-                name = kubernetes_secret.mysql_secret.metadata[0].name
+              config_map_key_ref {
+                name = kubernetes_config_map.mysql_initdb_config.metadata[0].name
                 key  = "MYSQL_USER"
               }
             }
@@ -62,8 +69,8 @@ resource "kubernetes_deployment" "mysql_deployment" {
           env {
             name = "MYSQL_PASSWORD"
             value_from {
-              secret_key_ref {
-                name = kubernetes_secret.mysql_secret.metadata[0].name
+              config_map_key_ref {
+                name = kubernetes_config_map.mysql_initdb_config.metadata[0].name
                 key  = "MYSQL_PASSWORD"
               }
             }
@@ -92,9 +99,8 @@ resource "kubernetes_service" "mysql_service" {
       protocol    = "TCP"
       port        = 3306
       target_port = 3306
-      node_port   = var.node_port
     }
-    type = "NodePort"
+    type = "ClusterIP"
   }
 
   depends_on = [
